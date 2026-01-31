@@ -795,6 +795,7 @@ UpdateFrontPageBannerStrings (
       CHAR16  *FwDate;
       UINT8   VersionIdx;
       UINT8   DateIdx;
+      CHAR16  *TmpBuffer;
       UINTN   BufferSize;
 
       Type0Record = (SMBIOS_TABLE_TYPE0 *)Record;
@@ -1406,5 +1407,6 @@ SetupResetReminder (
     gRT->ResetSystem (EfiResetCold, EFI_SUCCESS, 0, NULL);
   }
 }
+
 
 
