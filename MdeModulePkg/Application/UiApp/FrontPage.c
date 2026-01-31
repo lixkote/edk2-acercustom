@@ -805,14 +805,14 @@ UpdateFrontPageBannerStrings (
       GetOptionalStringByIndex ((CHAR8 *)((UINT8 *)Type0Record + Type0Record->Hdr.Length), VersionIdx, &FwVersion);
       GetOptionalStringByIndex ((CHAR8 *)((UINT8 *)Type0Record + Type0Record->Hdr.Length), DateIdx, &FwDate);
 
-      // Allocate buffer: " FW: " (5) + version + " " (1) + date + null
-      BufferSize = (5 + StrLen (FwVersion) + 1 + StrLen (FwDate) + 1) * sizeof (CHAR16);
+      // Allocate buffer: " BIOS Version: " (15) + version + " " (1) + date + null
+      BufferSize = (21 + 7 + 3 * sizeof (CHAR16);
       TmpBuffer  = AllocateZeroPool (BufferSize);
 
-      StrCatS (TmpBuffer, BufferSize / sizeof (CHAR16), L" FW: ");
-      StrCatS (TmpBuffer, BufferSize / sizeof (CHAR16), FwVersion);
+      StrCatS (TmpBuffer, BufferSize / sizeof (CHAR16), L"System BIOS Version: ");
+      StrCatS (TmpBuffer, BufferSize / sizeof (CHAR16), L"v2512.1");
       StrCatS (TmpBuffer, BufferSize / sizeof (CHAR16), L" ");
-      StrCatS (TmpBuffer, BufferSize / sizeof (CHAR16), FwDate);
+      StrCatS (TmpBuffer, BufferSize / sizeof (CHAR16), L" ");
 
       HiiSetString (gFrontPagePrivate.HiiHandle, STRING_TOKEN (STR_FRONT_PAGE_BIOS_VERSION), TmpBuffer, NULL);
 
@@ -844,22 +844,12 @@ UpdateFrontPageBannerStrings (
       DeviceName           = AllocateZeroPool (DeviceNameBufferSize);
       GetDeviceNameFromProduct (ProductName, DeviceNameBufferSize, &DeviceName);
 
-      if (DeviceName[0] != 0) {
-        // Format: "DeviceName (ProductName)"
-        BufferSize = (StrLen (DeviceName) + StrLen (ProductName) + 4) * sizeof (CHAR16);
-        TmpBuffer  = AllocateZeroPool (BufferSize);
-        StrCatS (TmpBuffer, BufferSize / sizeof (CHAR16), DeviceName);
-        StrCatS (TmpBuffer, BufferSize / sizeof (CHAR16), L" (");
-        StrCatS (TmpBuffer, BufferSize / sizeof (CHAR16), ProductName);
-        StrCatS (TmpBuffer, BufferSize / sizeof (CHAR16), L")");
-      } else {
-        // Format: "Manufacturer ProductName"
-        BufferSize = (StrLen (Manufacturer) + StrLen (ProductName) + 2) * sizeof (CHAR16);
-        TmpBuffer  = AllocateZeroPool (BufferSize);
-        StrCatS (TmpBuffer, BufferSize / sizeof (CHAR16), Manufacturer);
-        StrCatS (TmpBuffer, BufferSize / sizeof (CHAR16), L" ");
-        StrCatS (TmpBuffer, BufferSize / sizeof (CHAR16), ProductName);
-      }
+      // Format: "Manufacturer ProductName"
+      BufferSize = (4 + 14 + 2) * sizeof (CHAR16);
+      TmpBuffer  = AllocateZeroPool (BufferSize);
+      StrCatS (TmpBuffer, BufferSize / sizeof (CHAR16), L"Acer");
+      StrCatS (TmpBuffer, BufferSize / sizeof (CHAR16), L" ");
+      StrCatS (TmpBuffer, BufferSize / sizeof (CHAR16), L"Spin CP713-1WN");
 
       HiiSetString (gFrontPagePrivate.HiiHandle, STRING_TOKEN (STR_FRONT_PAGE_COMPUTER_MODEL), TmpBuffer, NULL);
 
@@ -897,10 +887,10 @@ UpdateFrontPageBannerStrings (
           *Truncate = L'\0';
         }
       }
-      // Allocate buffer: "CPU: " (5) + trimmed string + null
-      BufferSize = (5 + StrLen (TrimmedString) + 1) * sizeof (CHAR16);
+      // Allocate buffer: "CPU Info: " (10) + trimmed string + null
+      BufferSize = (10 + StrLen (TrimmedString) + 1) * sizeof (CHAR16);
       TmpBuffer  = AllocateZeroPool (BufferSize);
-      UnicodeSPrint (TmpBuffer, BufferSize, L"%s%s", L"CPU: ", TrimmedString);
+      UnicodeSPrint (TmpBuffer, BufferSize, L"%s%s", L"CPU Info: ", TrimmedString);
       HiiSetString (gFrontPagePrivate.HiiHandle, STRING_TOKEN (STR_FRONT_PAGE_CPU_MODEL), TmpBuffer, NULL);
       FreePool (OriginalString);
       FreePool (TmpBuffer);
@@ -960,10 +950,10 @@ UpdateFrontPageBannerStrings (
   // Now update the total installed RAM size
   //
   ConvertMemorySizeToString ((UINT32)InstalledMemory, &NewString);
-  // Allocate buffer: "RAM: " (5) + memory size string + null
-  UINTN   BufferSize = (5 + StrLen (NewString) + 1) * sizeof (CHAR16);
+  // Allocate buffer: "Total Memory: " (14) + memory size string + null
+  UINTN   BufferSize = (14 + StrLen (NewString) + 1) * sizeof (CHAR16);
   CHAR16  *TmpBuffer = AllocateZeroPool (BufferSize);
-  UnicodeSPrint (TmpBuffer, BufferSize, L"%s%s", L"RAM: ", NewString);
+  UnicodeSPrint (TmpBuffer, BufferSize, L"%s%s", L"Total Memory: ", NewString);
   HiiSetString (gFrontPagePrivate.HiiHandle, STRING_TOKEN (STR_FRONT_PAGE_MEMORY_SIZE), TmpBuffer, NULL);
   FreePool (NewString);
   FreePool (TmpBuffer);
@@ -1417,3 +1407,4 @@ SetupResetReminder (
     gRT->ResetSystem (EfiResetCold, EFI_SUCCESS, 0, NULL);
   }
 }
+
