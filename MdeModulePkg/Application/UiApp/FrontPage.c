@@ -793,7 +793,6 @@ UpdateFrontPageBannerStrings (
     if (Record->Type == SMBIOS_TYPE_BIOS_INFORMATION) {
       CHAR16  *FwVersion;
       CHAR16  *FwDate;
-      CHAR16  *TmpBuffer;
       UINT8   VersionIdx;
       UINT8   DateIdx;
       UINTN   BufferSize;
@@ -806,7 +805,7 @@ UpdateFrontPageBannerStrings (
       GetOptionalStringByIndex ((CHAR8 *)((UINT8 *)Type0Record + Type0Record->Hdr.Length), DateIdx, &FwDate);
 
       // Allocate buffer: " BIOS Version: " (15) + version + " " (1) + date + null
-      BufferSize = (21 + 7 + 3 * sizeof (CHAR16);
+      BufferSize = (21 + 7 + 3) * sizeof (CHAR16);
       TmpBuffer  = AllocateZeroPool (BufferSize);
 
       StrCatS (TmpBuffer, BufferSize / sizeof (CHAR16), L"System BIOS Version: ");
@@ -1407,4 +1406,5 @@ SetupResetReminder (
     gRT->ResetSystem (EfiResetCold, EFI_SUCCESS, 0, NULL);
   }
 }
+
 
